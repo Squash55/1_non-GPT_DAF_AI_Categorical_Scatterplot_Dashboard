@@ -211,42 +211,11 @@ st.markdown("""
 - Focusing on these high-priority quadrants could yield substantial improvements in cybersecurity outcomes.
 """)
 # === GOLDEN QUESTIONS & ANSWERS ===
-st.markdown("### 🌟 Golden Questions & Answers")
-
-# Rule-Based QA
-st.markdown("#### 🧠 Rule-Based Q&A")
-st.markdown("""
-**Q1:** Which mission-risk quadrant has the highest observed breach rate?
-
-**A1:** Based on statistical aggregation, the quadrant **`{}` @ Risk Level `{}`** exhibits the highest breach rate of **{:.2%}**. This is a critical outlier and should be prioritized for mitigation.
-
-**Q2:** Are any breach rates significantly higher than expected?
-
-**A2:** Yes, significance testing (Chi-Square Test of Independence) identified at least one statistically significant quadrant, indicating that the observed breach rates differ meaningfully from expected distributions. These flagged quadrants may indicate systemic vulnerabilities requiring further investigation.
-""".format(top_breach[0], top_breach[1], max_rate))
-
-from io import BytesIO
-
-# === GENERATE GOLDEN Q&A TEXT ===
-golden_qa = f"""
-🌟 Golden Questions & Answers
-
-🧠 Rule-Based Q&A
-
-Q1: Which mission-risk quadrant has the highest observed breach rate?
-A1: Based on statistical aggregation, the quadrant '{top_breach[0]}' @ Risk Level '{top_breach[1]}' exhibits the highest breach rate of {max_rate:.2%}. This is a critical outlier and should be prioritized for mitigation.
-
-Q2: Are any breach rates significantly higher than expected?
-A2: Yes, significance testing (Chi-Square Test of Independence) identified at least one statistically significant quadrant, indicating that the observed breach rates differ meaningfully from expected distributions. These flagged quadrants may indicate systemic vulnerabilities requiring further investigation.
-
-🤖 GPT-Based Q&A
-
-Q1: What's the main insight from the heatmap?
-A1: The heatmap suggests that cyber breaches are not uniformly distributed. Specific mission types at particular risk levels—such as 'Logistics' at moderate to high risk—stand out as having elevated breach rates. These areas demand attention and tailored cybersecurity policies.
-
-Q2: What should leadership prioritize?
-A2: Leadership should prioritize mitigating vulnerabilities in the top three breach-prone categories, as indicated in the Pareto chart. This includes reallocating resources, enhancing training, and introducing targeted interventions to reduce breach likelihood in high-risk mission zones.
-"""
+NameError: This app has encountered an error. The original error message is redacted to prevent data leaks. Full error details have been recorded in the logs (if you're on Streamlit Cloud, click on 'Manage app' in the lower right of your app).
+Traceback:
+File "/mount/src/1_non-gpt_daf_ai_categorical_scatterplot_dashboard/airforce_dashboard (4)_MVP Mr 27 9pm.py", line 311, in <module>
+    st.markdown(href, unsafe_allow_html=True)
+                ^^^^
 
 # === PDF GENERATION USING REPORTLAB (Alternative to fpdf) ===
 from io import BytesIO
