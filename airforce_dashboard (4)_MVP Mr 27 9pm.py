@@ -72,6 +72,9 @@ x_jitter, y_jitter = 0.1, 0.1
 df['x_jittered'] = df['x'] + np.random.normal(0, x_jitter, size=len(df))
 df['y_jittered'] = df['y'] + np.random.normal(0, y_jitter, size=len(df))
 
+
+
+
 # === PLOT HEATMAP ===
 fig, ax = plt.subplots(figsize=(10, 6))
 extent = [x_bins[0], x_bins[-1], y_bins[0], y_bins[-1]]
@@ -88,7 +91,7 @@ for i, x in enumerate(x_centers):
         r = int(heat_red[i, j])   # Successes (cyber breaches)
         b = int(heat_blue[i, j]) # Failures (no breaches)
         total = r + b
-        
+
         if total > 0:
             ax.text(x - 0.45,
                     y + 0.4,
@@ -97,8 +100,20 @@ for i, x in enumerate(x_centers):
                     fontsize=8,
                     color='black',
                     alpha=0.9)
-            
-            other_r = heat_red.sum() - r
-            other_b = heat_blue.sum() - b
-            
-            _, p_value_fisher_exact_test_result= stats.fisher_exact([[r,b],[other_r]])
+
+            other_r = heat_red.sum() - r  # Successes in all other quadrants
+            other_b = heat_blue.sum() - b  # Failures in all other quadrants
+
+            # Create a valid 2x2 contingency table
+            contingency_table = [[r, b], [other_r, other_b]]
+
+            # Perform Fisher's Exact Test
+            _, p_value = stats.fisher_exact(contingency_table)
+
+            if p_value < 0.05:
+                ax.text(x + 0.45,
+                        y + 0.45,
+                        f"p={p_value:.3f}", ha='right',
+                        va='top',
+                        fontsize=8,
+                        color='green')
