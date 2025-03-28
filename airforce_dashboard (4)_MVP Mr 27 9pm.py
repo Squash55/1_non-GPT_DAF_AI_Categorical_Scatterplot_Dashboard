@@ -17,9 +17,9 @@ This dashboard uses multiple forms of AI to support insight generation and decis
 - **Generative AI (GPT)**: This provides natural language interpretations of visualizations, offering insights in a conversational tone. These GPT-generated insights complement rule-based findings by summarizing trends and suggesting actionable strategies.
 
 Each AI output is labeled:
-- 🧠 Rule-Based for insights derived from statistical methods.
-- 🤖 GPT-Based for generative AI explanations.
-""")
+st.markdown("- **Rule-Based** for insights derived from statistical methods.")
+
+st.markdown("- **GPT-Based** for generative AI explanations.")
 
 # === DASHBOARD TITLE ===
 st.title("Air Force Cyber Breach Analysis Dashboard")
