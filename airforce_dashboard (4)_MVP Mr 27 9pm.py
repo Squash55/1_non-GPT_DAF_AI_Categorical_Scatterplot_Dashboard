@@ -140,9 +140,9 @@ ax.legend(['No Cyber Breach', 'Cyber Breach'], loc='upper left')
 # === LEGENDS ===
 
 # Add red/blue legend for breach categories to the right of the heatmap
-ax.legend(['No Cyber Breach', 'Cyber Breach'], loc='upper left', bbox_to_anchor=(1.25, 1.0))
+ax.legend(['No Cyber Breach', 'Cyber Breach'], loc='upper left', bbox_to_anchor=(1.35, 1.0))
 
-# Add a narrower risk level legend below the red/blue legend
+# Add a single Risk Level Legend below the red/blue legend
 legend_text_risk_levels = "\n".join([
     "📊 Cyber Risk Levels:",
     "0: Minimal - No major vulnerabilities.",
@@ -156,14 +156,11 @@ legend_text_risk_levels = "\n".join([
 ax.text(4.8, 0.5, legend_text_risk_levels, fontsize=8, verticalalignment='top', horizontalalignment='left')
 
 
-# Add the risk level legend below the existing legend on the right side of the plot
-ax.text(4.2, 1.5, legend_text_risk_levels, fontsize=9)
-
 # Display the heatmap plot
 st.pyplot(fig)
 
 # Continue with Pareto chart and interpretations...
-# === PARETO CHART ===
+
 # === PARETO CHART ===
 st.subheader("📊 Cyber Breach Rate Pareto Chart")
 
