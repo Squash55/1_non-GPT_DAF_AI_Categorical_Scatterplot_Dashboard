@@ -1464,7 +1464,7 @@ if "df" not in st.session_state or st.button("🔁 Regenerate Synthetic Data"):
         'Mission Type': np.random.choice(['Surveillance', 'Training', 'Combat', 'Logistics'], size=200),
         'Cyber Risk Level': np.random.randint(0, 5, size=200),
         'Cyber Breach History': np.random.choice([0, 1], size=200, p=[0.7, 0.3])
-    })
+    ])
 
 df = st.session_state.df.copy()
 
