@@ -365,46 +365,19 @@ with st.expander("Q3: How can this dashboard guide real-world decisions?"):
 **A3:** It provides statistical evidence and AI insights to identify breach-prone combinations of mission type and risk level.  
 Leaders can prioritize interventions where risk is most elevated, and analysts can validate their findings against AI-generated suggestions.
 """)
-# === PDF DOWNLOAD BUTTON ===
+# === PDF CREATION PROCESS ===
 st.markdown("---")
-st.markdown("### 📄 Download Full Report as PDF")
-st.markdown("""
-Click the button below to open your browser's print dialog. From there, you can save the entire dashboard as a clean PDF.
+st.markdown("### 📄 Export Dashboard to PDF")
 
-> Tip: On the print screen, choose **"Save as PDF"** as the destination and set margins to **none** for the cleanest export.
+st.info("""
+To save this dashboard as a clean PDF:
+
+1. Press **Ctrl + P** (Windows) or **Cmd + P** (Mac) on your keyboard.
+2. In the print dialog:
+   - **Destination**: Select **"Save as PDF"**
+   - **Layout**: Choose **"Landscape"** for wide charts
+   - **Margins**: Set to **"None"** for best fit
+3. Click **Save** to download the full report.
+
+> This will include all charts, interpretations, and answers visible on the page.
 """)
-
-import streamlit.components.v1 as components
-
-st.markdown("---")
-st.markdown("### 📄 Download Full Report as PDF")
-st.markdown("""
-Click the button below to open your browser's print dialog. From there, you can save the entire dashboard as a clean PDF.
-
-> Tip: Choose **Save as PDF** as the destination and set margins to **none** for a cleaner layout.
-""")
-
-components.html(
-    """
-    <script>
-    function printPDF() {
-        window.parent.postMessage({ type: 'print' }, '*');
-    }
-    </script>
-    <div style="text-align: center;">
-        <button onclick="printPDF()" style="
-            padding: 10px 20px;
-            font-size: 16px;
-            background-color: #4CAF50;
-            color: white;
-            border: none;
-            border-radius: 6px;
-            cursor: pointer;
-        ">
-            📥 Download Report as PDF
-        </button>
-    </div>
-    """,
-    height=100
-)
-
