@@ -138,9 +138,6 @@ legend_text_risk_levels = "\n".join([
 ])
 ax.text(4.8, 0.5, legend_text_risk_levels, fontsize=8, verticalalignment='top', horizontalalignment='left')
 
-st.pyplot(fig)
-
-
 # === LEGENDS ===
 
 # Add red/blue legend for breach categories to the right of the heatmap
