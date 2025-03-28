@@ -88,8 +88,8 @@ for i, x in enumerate(x_centers):
             other_r = heat_red.sum() - r
             other_b = heat_blue.sum() - b
             _, p = stats.fisher_exact([[r, b], [other_r, other_b]])
-            if p < 0.05:
-                ax.text(x, y, "🔺", ha='center', va='center', fontsize=14, color='black')
+            if p < 0.05 and total >= 10:
+                ax.text(x + 0.45, y + 0.45, f"p={p:.3f}", ha='right', va='top', fontsize=8, color='green', alpha=0.9)
                 significant_labels.append(coord_to_label.get((i, j), f"@({i},{j})"))
 
 for label, color in zip([0, 1], ['blue', 'red']):
