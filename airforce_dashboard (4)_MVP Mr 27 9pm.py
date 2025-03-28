@@ -145,17 +145,25 @@ st.markdown("### 🔍 Heatmap Interpretations")
 # Rule-Based Interpretation
 st.markdown("#### 🧠 Rule-Based Insights")
 st.markdown("""
-- The quadrant `Logistics @ Risk Level 2` (6/8 ratio) is statistically significant with a p-value of 0.027. This suggests that cyber breaches in this quadrant are disproportionately high compared to other quadrants.
-- Other quadrants show high breach-to-no-breach ratios but are not statistically significant due to alignment with overall dataset proportions.
+- The quadrant `Logistics @ Risk Level 2` (6/8 ratio) is statistically significant with a p-value of 0.027.
 """)
 
 # GPT-Based Interpretation
 st.markdown("#### 🤖 GPT-Based Insights")
 st.markdown("""
 - The heatmap highlights that `Logistics @ Risk Level 2` has a statistically significant breach rate.
-- Higher risk levels generally exhibit more breaches across most mission types.
 """)
 
 # === PARETO CHART ===
 
-grouped...
+st.subheader("📊 Pareto Chart: Cyber Breach Rates")
+grouped = df.groupby(['Mission Type', 'Cyber Risk Level'])
+summary = grouped['Cyber Breach History'].agg(['mean', 'count']).reset_index()
+summary['Label'] = summary['Mission Type'] + ' @ ' + summary['Cyber Risk Level'].astype(str)
+summary['Cyber Breach %'] = (summary['mean'] * 100).round(1)
+summary.sort_values(by='Cyber Breach %', ascending=False)
+
+fig2, ax2 = plt.subplots(figsize=(10, 6))
+bars = ax2.barh(summary['Label'], summary['Cyber Breach %'], color='tomato')
+
+for bar,count in zip(bars.summary["count"]):
