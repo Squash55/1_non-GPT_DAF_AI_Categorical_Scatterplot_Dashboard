@@ -250,7 +250,6 @@ A2: Leadership should prioritize mitigating vulnerabilities in the top three bre
 
 # === PDF GENERATION USING REPORTLAB (Alternative to fpdf) ===
 from io import BytesIO
-from reportlab.lib.pagesizes import LETTER
 
 # === DEFINE CONTENT ===
 golden_qa = f"""
