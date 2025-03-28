@@ -241,12 +241,39 @@ Q2: What should leadership prioritize?
 A2: Leadership should prioritize mitigating vulnerabilities in the top three breach-prone categories, as indicated in the Pareto chart. This includes reallocating resources, enhancing training, and introducing targeted interventions to reduce breach likelihood in high-risk mission zones.
 """
 
-# === SAFELY FORMAT GOLDEN Q&A AND PROVIDE DOWNLOAD ===
+# ✅ EXPORT FULL REPORT AS TXT (SAFE, NO EXTERNAL LIBRARIES)
+
 import base64
 
-# === Build Q&A Text Content ===
-golden_qa_text = f"""
+# === COMPILE FULL REPORT TEXT ===
+full_report = f"""
+Air Force Cyber Breach Analysis Dashboard
+
+==============================
+📘 Methods & Limitations
+==============================
+This dashboard uses seeded synthetic data to simulate cyber breach patterns across mission types and cyber risk levels.
+
+- Color-coded heatmap with jittered data points.
+- Chi-Square Test to flag significant quadrant risks.
+- Golden Questions & Answers auto-generated.
+- Cyber Risk Levels are displayed as a legend (0 = Minimal Risk, 4 = Critical Risk).
+
+==============================
+🧠 AI-Generated Smart Problem Statement
+==============================
+In the synthetic dataset, the highest cyber breach rate occurs for '{top_breach[0]}' missions at Cyber Risk Level {top_breach[1]}, with a breach rate of {max_rate:.2%}.
+This quadrant may represent the most critical operational vulnerability.
+
+==============================
+📊 Heatmap + Pareto Chart Insights
+==============================
+- Heatmap and Pareto visualizations included in dashboard.
+- Pareto shows breach concentration across mission-risk categories.
+
+==============================
 🌟 Golden Questions & Answers
+==============================
 
 🧠 Rule-Based Q&A
 
@@ -265,17 +292,10 @@ Q2: What should leadership prioritize?
 A2: Leadership should prioritize mitigating vulnerabilities in the top three breach-prone categories, as indicated in the Pareto chart. This includes reallocating resources, enhancing training, and introducing targeted interventions to reduce breach likelihood in high-risk mission zones.
 """
 
-# === Display in Streamlit ===
-st.markdown("### 🌟 Golden Questions & Answers")
-st.text(golden_qa_text)
+# === ENCODE REPORT FOR DOWNLOAD ===
+b64_report = base64.b64encode(full_report.encode()).decode()
+href = f'<a href="data:text/plain;base64,{b64_report}" download="Full_Cyber_Breach_Report.txt">📥 Download Full Cyber Breach Report (TXT)</a>'
 
-# === Prepare Download as TXT File ===
-# ✅ ENSURE the variable `href` is defined just above it like this:
-b64_txt = base64.b64encode(golden_qa_text.encode()).decode()
-href = f'<a href="data:text/plain;base64,{b64_txt}" download="Golden_QA.txt">📥 Download Golden Q&A as TXT</a>'
-
-# === DISPLAY LINK ===
+# === DISPLAY DOWNLOAD LINK ===
+st.markdown("### 📄 Download Full Report")
 st.markdown(href, unsafe_allow_html=True)
-
-
-
