@@ -33,6 +33,49 @@ This dashboard uses seeded synthetic data to simulate cyber breach patterns acro
 - Golden Questions & Answers auto-generated.
 - Cyber Risk Levels are displayed as a legend (0 = Minimal Risk, 4 = Critical Risk).
 """)
+# === CHI-SQUARE TEST EXPLANATION ===
+st.markdown("""
+### 🧪 Understanding the Chi-Square Test & P-Values
+
+This dashboard uses the **Chi-Square Test of Independence** to assess whether the proportion of cyber breaches is significantly different in certain mission type and cyber risk level combinations.
+
+#### 🔍 What does the Chi-Square Test do?
+It checks whether the **distribution of breach vs. no breach** in one cell (e.g., `Combat @ Risk Level 4`) is significantly different from what we would expect **if there were no real pattern** — just random variation.
+
+#### 📈 What is a p-value?
+A **p-value** tells us how likely it is that the observed difference happened by chance.
+
+- If `p < 0.05`, the result is **statistically significant**, meaning it's **unlikely to be random**.
+- In the heatmap, you’ll see green labels like `p=0.017` above certain quadrants.
+- These markers indicate that the cyber breach rate in that cell is **unusually high or low** compared to the rest of the data.
+
+#### ✅ How to use this info:
+- Quadrants with **p < 0.05** are flagged as **potential risk hotspots**.
+- These areas are prioritized in the **Rule-Based insights** and **Golden Questions & Answers**.
+""")
+# === OPTIONAL DEEP DIVE ON CHI-SQUARE ===
+with st.expander("📚 Learn More: How the Chi-Square Test Works (with Math & Video)"):
+    st.markdown("""
+#### 🧮 The Math Behind It (Simplified)
+
+The Chi-Square statistic compares **what we observe** in the data to **what we'd expect** if there were no relationship between mission type, cyber risk level, and breaches.
+
+For each cell:
+
+Where:
+- **Observed** = number of breaches (or no breaches) in a specific cell.
+- **Expected** = what you'd expect if breach likelihood was evenly spread across all groups.
+
+If the **Chi² value** is large enough, it produces a **low p-value**, meaning the observed difference is statistically significant.
+
+#### 📺 Prefer a Visual Explanation?
+
+Watch this 4-minute intro video:
+- [Chi-Square Test for Beginners (YouTube)](https://www.youtube.com/watch?v=5ABpqVSx33I)
+
+> Tip: Look at heatmap quadrants with a green `p=...` label — these are the ones the Chi-Square test says are worth investigating.
+""")
+
 
 # === TRAINING NOTE ===
 st.markdown("""
@@ -198,6 +241,27 @@ ax.text(4.8, 0.5, legend_text_risk_levels, fontsize=8, verticalalignment='top', 
 st.pyplot(fig)
 
 # Continue with Pareto chart and interpretations...
+
+# === CHI-SQUARE TEST EXPLANATION ===
+st.markdown("""
+### 🧪 Understanding the Chi-Square Test & P-Values
+
+This dashboard uses the **Chi-Square Test of Independence** to assess whether the proportion of cyber breaches is significantly different in certain mission type and cyber risk level combinations.
+
+#### 🔍 What does the Chi-Square Test do?
+It checks whether the **distribution of breach vs. no breach** in one cell (e.g., `Combat @ Risk Level 4`) is significantly different from what we would expect **if there were no real pattern** — just random variation.
+
+#### 📈 What is a p-value?
+A **p-value** tells us how likely it is that the observed difference happened by chance.
+
+- If `p < 0.05`, the result is **statistically significant**, meaning it's **unlikely to be random**.
+- In the heatmap, you’ll see green labels like `p=0.017` above certain quadrants.
+- These markers indicate that the cyber breach rate in that cell is **unusually high or low** compared to the rest of the data.
+
+#### ✅ How to use this info:
+- Quadrants with **p < 0.05** are flagged as **potential risk hotspots**.
+- These areas are prioritized in the **Rule-Based insights** and **Golden Questions & Answers**.
+""")
 
 # === PARETO CHART ===
 st.subheader("📊 Cyber Breach Rate Pareto Chart")
