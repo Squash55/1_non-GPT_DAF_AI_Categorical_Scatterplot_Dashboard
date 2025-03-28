@@ -83,12 +83,15 @@ for i, x in enumerate(x_centers):
             chi2_statistic, p_value, _, _ = chi2_contingency(contingency_table)
             
             if p_value < 0.05: # Significant result
-                ax.text(x + 0.45, y + 0.45, f"p={p_value:.3f}", ha='right', va='top', fontsize=8, color='green', alpha=0.9)
+                ax.text(x + 0.45, y + 0.45, f"p={p_value:.3f}", ha='right', va='top', fontsize=8,
+                        color='green', alpha=0.9)
                 significant_labels.append(f"{mission_types[i]} @ Risk Level {j} (p={p_value:.3f})")
         
-        # Display proportions in each quadrant
-        ax.text(x - 0.45, y + 0.4, f"{r}/{b}", ha='left', va='top', fontsize=8,
-                color='black' if total > 10 else 'gray')
+        # Display proportions in each quadrant with consistent styling
+        ax.text(x - 0.45, y + 0.4,
+                f"{r}/{b}" if total > 0 else "N/A",
+                ha='left', va='top', fontsize=8,
+                color='black')  # Ensure all text is black for readability
 
 for label in [0, 1]:
     subset_color = ['blue', 'red'][label]
@@ -112,17 +115,5 @@ if significant_labels:
     st.success(f"{len(significant_labels)} quadrant(s) show statistically significant cyber breach differences (p < 0.05):")
     for label in significant_labels:
         st.write("🔺", label)
-    
-    # Explanation of the test and results
-    st.markdown("""
-    **Test Used**: Chi-Square Test of Independence
-    
-    The Chi-Square Test evaluates whether there is a statistically significant association between mission type/risk level and cyber breaches.
-    
-    - The quadrant with `6/8` had a p-value < 0.05 because its proportion deviated significantly from the overall dataset proportions.
-    - Other quadrants did not have p-values < 0.05 because their proportions were closer to what would be expected under the null hypothesis.
-    
-    Statistical significance depends on both the observed ratios and the total sample sizes.
-    """)
 else:
     st.info("No quadrant showed a statistically significant difference.")
