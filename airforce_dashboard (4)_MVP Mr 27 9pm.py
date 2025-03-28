@@ -227,7 +227,7 @@ This dashboard uses multiple forms of AI to support insight generation and decis
     - The Pareto chart highlights categories that contribute most to cyber breaches, helping prioritize mitigation efforts.
 
 - **Generative AI (GPT)**: This provides natural language interpretations of visualizations, offering insights in a conversational tone. These GPT-generated insights complement rule-based findings by summarizing trends and suggesting actionable strategies.
-```python
+""")
 import streamlit as st
 import pandas as pd
 import numpy as np
