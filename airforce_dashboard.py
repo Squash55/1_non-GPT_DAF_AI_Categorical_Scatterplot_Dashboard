@@ -5,6 +5,8 @@ import matplotlib.pyplot as plt
 from matplotlib.colors import LinearSegmentedColormap, Normalize
 from scipy.stats import chi2_contingency
 
+from chart_modules.chart_quadrant import show_chart_quadrant
+
 # === AI INSIGHTS METHODS ===
 st.markdown("""
 ### 🤖 AI Insights Methods
@@ -365,3 +367,20 @@ with st.expander("Q3: How can this dashboard guide real-world decisions?"):
 **A3:** It provides statistical evidence and AI insights to identify breach-prone combinations of mission type and risk level.  
 Leaders can prioritize interventions where risk is most elevated, and analysts can validate their findings against AI-generated suggestions.
 """)
+
+# === MULTI-CHART VISUALS (Radar, Bubble, Decision Tree, Sankey) ===
+from chart_modules.chart_quadrant import show_chart_quadrant
+
+st.markdown("### 🧠 Optional Visual Deep Dive")
+st.markdown("""
+Use the toggle below to reveal an additional quadrant of AI-powered visualizations that help surface patterns across:
+- Mission types
+- Cyber risk levels
+- Breach outcomes
+
+These charts complement the heatmap and Pareto views and offer new angles for golden question exploration.
+""")
+
+if st.checkbox("📊 Show Multi-Chart Visuals"):
+    show_chart_quadrant(df)
+
