@@ -240,7 +240,27 @@ ax.text(4.8, 0.5, legend_text_risk_levels, fontsize=8, verticalalignment='top', 
 # Display the heatmap plot
 st.pyplot(fig)
 
-# Continue with Pareto chart and interpretations...
+## === HEATMAP INTERPRETATIONS ===
+st.markdown("### 🔥 Heatmap Interpretations")
+
+# Rule-Based Interpretation
+st.markdown("#### 🧠 Rule-Based Insights")
+st.markdown(f"""
+- Cells labeled with green `p=...` values indicate **statistically significant** differences in cyber breach rates compared to other areas.
+- For example, quadrants like **{significant_labels[0] if significant_labels else 'Combat @ Risk Level 4'}** are flagged due to unusually high breach proportions.
+- These zones are **not likely to result from random variation**, making them key focus areas for further investigation.
+- Higher proportions of red dots in a quadrant indicate elevated breach activity, especially when total counts are also high.
+""")
+
+# GPT-Based Interpretation
+st.markdown("#### 🤖 GPT-Based Insights")
+st.markdown("""
+- The heatmap reveals clusters of cyber breaches concentrated in specific mission/risk combinations.
+- Statistically flagged zones — marked by green p-values — often align with visual patterns of breach-heavy quadrants.
+- This visual-spatial insight enables leaders to **spot systemic vulnerabilities**, such as those in `Combat` missions at high risk levels.
+- Using this heatmap interactively with the Golden Q&A helps validate assumptions and uncover overlooked hot zones.
+""")
+
 
 # === CHI-SQUARE TEST EXPLANATION ===
 st.markdown("""
