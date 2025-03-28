@@ -32,6 +32,7 @@ max_rate = df.groupby(['Mission Type', 'Cyber Risk Level'])['Cyber Breach Histor
 st.markdown(f"In the synthetic dataset, the highest cyber breach rate occurs for **{top_breach[0]} missions at Cyber Risk Level {top_breach[1]}**, with a breach rate of **{max_rate:.2%}**. This quadrant may represent the most critical operational vulnerability.")
 
 # === PREPARE FOR HEATMAP ===
+
 mission_map = {'Surveillance': 0, 'Training': 1, 'Combat': 2, 'Logistics': 3}
 df['x'] = df['Mission Type'].map(mission_map)
 df['y'] = df['Cyber Risk Level']
@@ -45,10 +46,13 @@ heat_red, _, _ = np.histogram2d(df[df['Cyber Breach History'] == 1]['x'], df[df[
 heat_blue, _, _ = np.histogram2d(df[df['Cyber Breach History'] == 0]['x'], df[df['Cyber Breach History'] == 0]['y'], bins=[x_bins, y_bins])
 heat_total = heat_red + heat_blue
 
+# Safely handle invalid values in proportion calculation
 with np.errstate(divide='ignore', invalid='ignore'):
-    proportion = np.true_divide(heat_red, heat_total)
-    proportion[heat_total == 0] = np.nan
-    masked_proportion = ma.masked_invalid(proportion)
+    proportion = np.true_divide(heat_red, heat_total)  # Compute proportions
+    proportion[heat_total == 0] = np.nan              # Set NaN for empty cells
+
+# Use fix_invalid to mask and replace invalid values
+masked_proportion = np.ma.fix_invalid(proportion)
 
 # === JITTER ===
 jitter = st.slider("Jitter Amount", min_value=0.0, max_value=0.5, value=0.1, step=0.01)
