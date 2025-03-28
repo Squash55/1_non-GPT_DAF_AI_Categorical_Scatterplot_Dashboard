@@ -365,6 +365,17 @@ with st.expander("Q3: How can this dashboard guide real-world decisions?"):
 **A3:** It provides statistical evidence and AI insights to identify breach-prone combinations of mission type and risk level.  
 Leaders can prioritize interventions where risk is most elevated, and analysts can validate their findings against AI-generated suggestions.
 """)
+
+# === MULTI-CHART RISK QUADRANT ===
+# === MULTI-CHART RISK QUADRANT ===
+from chart_modules.chart_quadrant import show_chart_quadrant
+
+# Call the function using your current DataFrame
+show_chart_quadrant(df)
+
+    # all your radar, bubble, decision tree, sankey code
+
+
 # === PDF CREATION PROCESS ===
 st.markdown("---")
 st.markdown("### 📄 Export Dashboard to PDF")
