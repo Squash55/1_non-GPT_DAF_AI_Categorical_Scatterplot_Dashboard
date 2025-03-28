@@ -260,6 +260,17 @@ st.markdown("""
 - This visual-spatial insight enables leaders to **spot systemic vulnerabilities**, such as those in `Combat` missions at high risk levels.
 - Using this heatmap interactively with the Golden Q&A helps validate assumptions and uncover overlooked hot zones.
 """)
+# === HEATMAP COLOR LEGEND EXPLAINER ===
+st.markdown("""
+> 🎨 **How to Read the Heatmap Colors**
+- 🔵 **Blue**: Mostly no breaches (low cyber breach proportion).
+- ⚪ **White**: About half breached, half not (neutral proportion).
+- 🔴 **Red**: High proportion of breaches.
+- Green `p=...` tags: Statistically significant cells (Chi-Square p-value < 0.05).
+- **Black Text** in each quadrant: Shows actual counts (e.g., `7/2` = 7 breaches, 2 non-breaches).
+
+Together, the heatmap shows where breaches are concentrated **visually** and **statistically**.
+""")
 
 
 # === CHI-SQUARE TEST EXPLANATION ===
