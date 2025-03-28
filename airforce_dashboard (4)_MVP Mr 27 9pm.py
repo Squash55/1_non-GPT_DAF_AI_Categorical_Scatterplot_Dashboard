@@ -374,19 +374,37 @@ Click the button below to open your browser's print dialog. From there, you can 
 > Tip: On the print screen, choose **"Save as PDF"** as the destination and set margins to **none** for the cleanest export.
 """)
 
-# Centered download button
+import streamlit.components.v1 as components
+
+st.markdown("---")
+st.markdown("### 📄 Download Full Report as PDF")
 st.markdown("""
-<div style="text-align: center;">
-    <button onclick="window.print()" style="
-        padding: 10px 20px;
-        font-size: 16px;
-        background-color: #4CAF50;
-        color: white;
-        border: none;
-        border-radius: 6px;
-        cursor: pointer;
-    ">
-        📥 Download Report as PDF
-    </button>
-</div>
-""", unsafe_allow_html=True)
+Click the button below to open your browser's print dialog. From there, you can save the entire dashboard as a clean PDF.
+
+> Tip: Choose **Save as PDF** as the destination and set margins to **none** for a cleaner layout.
+""")
+
+components.html(
+    """
+    <script>
+    function printPDF() {
+        window.parent.postMessage({ type: 'print' }, '*');
+    }
+    </script>
+    <div style="text-align: center;">
+        <button onclick="printPDF()" style="
+            padding: 10px 20px;
+            font-size: 16px;
+            background-color: #4CAF50;
+            color: white;
+            border: none;
+            border-radius: 6px;
+            cursor: pointer;
+        ">
+            📥 Download Report as PDF
+        </button>
+    </div>
+    """,
+    height=100
+)
+
