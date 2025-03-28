@@ -208,8 +208,8 @@ st.markdown("#### 🤖 GPT-Based Insights")
 st.markdown("""
 - The Pareto chart reveals that most cyber breaches are concentrated in a few key areas, particularly `Logistics @ Risk Level 2` and `Training @ Risk Level 3`.
 - These findings align with the principle that a small number of categories often account for the majority of impacts (Pareto Principle or 80/20 rule).
-- Focusing on these high-priority quadrants could yield substantial improvements in cybersecurity outcomes.
-```python
+- Focusing on these high-priority quadrants could yield substantial improvements in cybersecurity outcomes.""")
+
 import streamlit as st
 import pandas as pd
 import numpy as np
