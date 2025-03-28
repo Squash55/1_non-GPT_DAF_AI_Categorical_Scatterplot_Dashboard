@@ -1456,7 +1456,7 @@ st.pyplot(fig)
 st.subheader("📊 Cyber Breach Rate Pareto Chart")
 
 # Group data by Mission Type and Risk Level
-grouped = df.groupby(['
+grouped = df.groupby([
 # === SEEDING & DATA REGEN BUTTON ===
 if "df" not in st.session_state or st.button("🔁 Regenerate Synthetic Data"):
     np.random.seed(42)
