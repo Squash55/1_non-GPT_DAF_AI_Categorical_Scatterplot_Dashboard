@@ -121,6 +121,9 @@ legend_text_risk_levels = "\n".join([
 # Position Risk Level Legend below red/blue legend
 ax.text(4.5, 0.5, legend_text_risk_levels, fontsize=8, verticalalignment='top', horizontalalignment='left')
 
+# Position Risk Level Legend below red/blue legend
+ax.text(4.5, 0.5, legend_text_risk_levels, fontsize=8, verticalalignment='top', horizontalalignment='left')
+
             # Create a valid 2x2 contingency table
             contingency_table = [[r, b], [other_r, other_b]]
 
