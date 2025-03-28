@@ -77,10 +77,7 @@ df['x_jittered'] = df['x'] + np.random.normal(0, jitter, size=len(df))
 df['y_jittered'] = df['y'] + np.random.normal(0, jitter, size=len(df))
 
 
-
-
-# === PLOT HEATMAP ===
-# === PLOT HEATMAP (UPDATED) ===
+# === PLOT HEATMAP (FINAL) ===
 fig, ax = plt.subplots(figsize=(14, 6))  # Increased width
 
 extent = [x_bins[0], x_bins[-1], y_bins[0], y_bins[-1]]
@@ -126,10 +123,22 @@ ax.set_xlabel('Mission Type')
 ax.set_ylabel('Cyber Risk Level')
 ax.set_title('Categorical Heatmap of Cyber Breach Proportions')
 
-ax.legend(loc='center left', bbox_to_anchor=(1.05, 0.5))  # Legend outside to the right
+# Combined legends outside plot
+handles, labels = ax.get_legend_handles_labels()
+ax.legend(handles, labels, loc='upper left', bbox_to_anchor=(1.05, 1.0))
+
+# Risk level explanation text
+legend_text_risk_levels = "\n".join([
+    "📊 Cyber Risk Levels:",
+    "0: Minimal - No major vulnerabilities.",
+    "1: Low - Minor vulnerabilities.",
+    "2: Moderate - Some vulnerabilities.",
+    "3: High - Significant vulnerabilities.",
+    "4: Critical - Severe vulnerabilities."
+])
+ax.text(4.8, 0.5, legend_text_risk_levels, fontsize=8, verticalalignment='top', horizontalalignment='left')
 
 st.pyplot(fig)
-
 
 
 # === LEGENDS ===
