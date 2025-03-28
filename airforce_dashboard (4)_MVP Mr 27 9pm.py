@@ -133,14 +133,19 @@ grouped = df.groupby(['Mission Type', 'Cyber Risk Level'])
 summary = grouped['Cyber Breach History'].agg(['mean', 'count']).reset_index()
 summary['Label'] = summary['Mission Type'] + ' @ ' + summary['Cyber Risk Level'].astype(str)
 summary['Cyber Breach %'] = (summary['mean'] * 100).round(1)
-summary.sort_values(by='Cyber Breach %', ascending=False)
+summary = summary.sort_values(by='Cyber Breach %', ascending=False)
 
 fig2, ax2 = plt.subplots(figsize=(10, 6))
 bars = ax2.barh(summary['Label'], summary['Cyber Breach %'], color='tomato', edgecolor='black')
 
-for bar,
-count in zip(bars,
-summary[
-count]):
-width.
-plt.show
+# Corrected loop to annotate bars
+for bar, count in zip(bars, summary['count']):
+    width = bar.get_width()
+    ax2.text(width + 1, bar.get_y() + bar.get_height() / 2, f"{count} pts", va='center', fontsize=8)
+
+ax2.set_xlabel('Cyber Breach Percentage (%)')
+ax2.set_title('Pareto Chart: Cyber Breach Rate by Mission × Risk Level')
+ax2.invert_yaxis()
+
+st.pyplot(fig2)
+
