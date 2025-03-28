@@ -10,7 +10,7 @@ import scipy.stats as stats
 st.markdown("""
 ### 🤖 AI Insights Methods
 This dashboard uses multiple forms of AI to support insight generation and decision-making:
-- **Rule-Based AI** (e.g. Fisher’s Exact Test, heuristics)
+- **Rule-Based AI** (e.g., Chi-Square Test for statistical significance)
 - **Generative AI (LLM)** (optional: GPT-based chart summaries, questions)
 - **Predictive AI** (coming soon: ML to forecast cyber breaches)
 
@@ -31,6 +31,8 @@ This dashboard uses seeded synthetic data to simulate cyber breach patterns acro
 """)
 
 # === SEEDING & DATA REGEN BUTTON ===
+st.markdown("#### 🔄 Regenerate Synthetic Data")
+st.markdown("Click the button below to generate a new synthetic dataset for analysis. This will reset all visualizations and calculations.")
 if "df" not in st.session_state or st.button("🔁 Regenerate Synthetic Data"):
     np.random.seed(42)
     st.session_state.df = pd.DataFrame({
@@ -72,9 +74,6 @@ x_jitter, y_jitter = 0.1, 0.1
 df['x_jittered'] = df['x'] + np.random.normal(0, x_jitter, size=len(df))
 df['y_jittered'] = df['y'] + np.random.normal(0, y_jitter, size=len(df))
 
-
-
-
 # === PLOT HEATMAP ===
 fig, ax = plt.subplots(figsize=(10, 6))
 extent = [x_bins[0], x_bins[-1], y_bins[0], y_bins[-1]]
@@ -104,6 +103,24 @@ for i, x in enumerate(x_centers):
             other_r = heat_red.sum() - r  # Successes in all other quadrants
             other_b = heat_blue.sum() - b  # Failures in all other quadrants
 
+# === LEGENDS ===
+
+# Add red/blue legend for breach categories above heatmap
+ax.legend(['No Cyber Breach', 'Cyber Breach'], loc='upper right', bbox_to_anchor=(1.25, 1.0))
+
+# Add a single Risk Level Legend below the red/blue legend
+legend_text_risk_levels = "\n".join([
+    "📊 Cyber Risk Levels:",
+    "0: Minimal - No major vulnerabilities.",
+    "1: Low - Minor vulnerabilities.",
+    "2: Moderate - Some vulnerabilities.",
+    "3: High - Significant vulnerabilities.",
+    "4: Critical - Severe vulnerabilities."
+])
+
+# Position Risk Level Legend below red/blue legend
+ax.text(4.5, 0.5, legend_text_risk_levels, fontsize=8, verticalalignment='top', horizontalalignment='left')
+
             # Create a valid 2x2 contingency table
             contingency_table = [[r, b], [other_r, other_b]]
 
@@ -117,3 +134,5 @@ for i, x in enumerate(x_centers):
                         va='top',
                         fontsize=8,
                         color='green')
+# Perform Chi-Square test
+_, p_value, _, _ = stats.chi2_contingency([[r, b], [other_r, other_b]])
