@@ -159,6 +159,9 @@ df['y_jittered'] = df['y'] + np.random.normal(0, jitter, size=len(df))
 
 import plotly.graph_objects as go
 
+
+
+
 # === PREPARE FOR HEATMAP ===
 mission_map = {'Surveillance': 0, 'Training': 1, 'Combat': 2, 'Logistics': 3}
 df['x'] = df['Mission Type'].map(mission_map)
@@ -200,6 +203,42 @@ jitter = st.slider(
 
 
 # === PLOT HEATMAP ===
+
+# === PREPARE FOR HEATMAP ===
+mission_map = {'Surveillance': 0, 'Training': 1, 'Combat': 2, 'Logistics': 3}
+df['x'] = df['Mission Type'].map(mission_map)
+df['y'] = df['Cyber Risk Level']
+
+x_bins = np.linspace(-0.5, 3.5, 5)
+y_bins = np.linspace(-0.5, 4.5, 6)
+x_centers = (x_bins[:-1] + x_bins[1:]) / 2
+y_centers = (y_bins[:-1] + y_bins[1:]) / 2
+
+# Red = breaches, Blue = no breaches
+heat_red, _, _ = np.histogram2d(
+    df[df['Cyber Breach History'] == 1]['x'], 
+    df[df['Cyber Breach History'] == 1]['y'], 
+    bins=[x_bins, y_bins]
+)
+heat_blue, _, _ = np.histogram2d(
+    df[df['Cyber Breach History'] == 0]['x'], 
+    df[df['Cyber Breach History'] == 0]['y'], 
+    bins=[x_bins, y_bins]
+)
+heat_total = heat_red + heat_blue
+
+with np.errstate(divide='ignore', invalid='ignore'):
+    proportion = np.true_divide(heat_red, heat_total)
+    proportion[heat_total == 0] = np.nan
+
+masked_proportion = np.ma.fix_invalid(proportion)
+
+# === JITTER SLIDER ===
+jitter = st.slider("Jitter Amount", min_value=0.0, max_value=0.5, value=0.1, step=0.01, key="jitter_slider")
+df['x_jittered'] = df['x'] + np.random.normal(0, jitter, size=len(df))
+df['y_jittered'] = df['y'] + np.random.normal(0, jitter, size=len(df))
+
+# === PLOT HEATMAP ===
 fig, ax = plt.subplots(figsize=(14, 6))
 
 extent = [x_bins[0], x_bins[-1], y_bins[0], y_bins[-1]]
@@ -227,14 +266,17 @@ for i, x in enumerate(x_centers):
         b = int(heat_blue[i, j])
         total = r + b
 
-        # Center breach percentage
+        # Show count ratio in upper left
+        ax.text(x - 0.45, y + 0.4, f"{r}/{b}" if total > 0 else "N/A", ha='left', va='top', fontsize=8, color='black')
+
+        # Show breach rate % in upper right
         if total > 0:
             breach_rate = r / total
-            ax.text(x, y, f"{breach_rate:.0%}", color='black', fontsize=10, ha='center', va='center', fontweight='bold')
+            ax.text(x + 0.45, y + 0.4, f"{breach_rate:.0%}", ha='right', va='top', fontsize=8, color='black')
         else:
-            ax.text(x, y, "N/A", color='gray', fontsize=9, ha='center', va='center')
+            ax.text(x + 0.45, y + 0.4, "N/A", ha='right', va='top', fontsize=8, color='gray')
 
-        # Add green p-value for significance
+        # Add green p-value if statistically significant
         if total >= 5:
             other_r = heat_red.sum() - r
             other_b = heat_blue.sum() - b
@@ -242,11 +284,8 @@ for i, x in enumerate(x_centers):
             chi2_statistic, p_value, _, _ = chi2_contingency(contingency_table)
 
             if p_value < 0.05:
-                ax.text(x + 0.45, y + 0.45, f"p={p_value:.3f}", ha='right', va='top', fontsize=8, color='green')
+                ax.text(x + 0.45, y + 0.25, f"p={p_value:.3f}", ha='right', va='top', fontsize=8, color='green')
                 significant_labels.append(f"{mission_types[i]} @ Risk Level {j} (p={p_value:.3f})")
-
-        # Show actual count ratios (breach / no breach)
-        ax.text(x - 0.45, y + 0.4, f"{r}/{b}" if total > 0 else "N/A", ha='left', va='top', fontsize=8, color='black')
 
 # Scatter points with jitter (breach vs no breach)
 for label in [0, 1]:
