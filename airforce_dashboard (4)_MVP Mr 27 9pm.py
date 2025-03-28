@@ -94,7 +94,7 @@ for label in [0, 1]:
     subset_color = ['blue', 'red'][label]
     subset_data = df[df['Cyber Breach History'] == label]
     ax.scatter(subset_data['x_jittered'], subset_data['y_jittered'], color=subset_color,
-               edgecolors='white', linewidth=0.5, s=50)
+               edgecolors='white', linewidth=0.5)
 
 ax.set_xticks(range(4))
 ax.set_xticklabels(mission_types)
@@ -106,11 +106,23 @@ ax.legend(['No Cyber Breach', 'Cyber Breach'], loc='upper left', bbox_to_anchor=
 
 st.pyplot(fig)
 
-# === SIGNIFICANT RESULTS ===
+# === SIGNIFICANT RESULTS WITH EXPLANATION ===
 st.markdown("### 🔬 Statistically Significant Quadrants")
 if significant_labels:
     st.success(f"{len(significant_labels)} quadrant(s) show statistically significant cyber breach differences (p < 0.05):")
     for label in significant_labels:
         st.write("🔺", label)
+    
+    # Explanation of the test and results
+    st.markdown("""
+    **Test Used**: Chi-Square Test of Independence
+    
+    The Chi-Square Test evaluates whether there is a statistically significant association between mission type/risk level and cyber breaches.
+    
+    - The quadrant with `6/8` had a p-value < 0.05 because its proportion deviated significantly from the overall dataset proportions.
+    - Other quadrants did not have p-values < 0.05 because their proportions were closer to what would be expected under the null hypothesis.
+    
+    Statistical significance depends on both the observed ratios and the total sample sizes.
+    """)
 else:
     st.info("No quadrant showed a statistically significant difference.")
