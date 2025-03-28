@@ -80,7 +80,7 @@ df['y_jittered'] = df['y'] + np.random.normal(0, jitter, size=len(df))
 
 
 # === PLOT HEATMAP ===
-f# === PLOT HEATMAP (UPDATED) ===
+# === PLOT HEATMAP (UPDATED) ===
 fig, ax = plt.subplots(figsize=(14, 6))  # Increased width
 
 extent = [x_bins[0], x_bins[-1], y_bins[0], y_bins[-1]]
@@ -126,10 +126,10 @@ ax.set_xlabel('Mission Type')
 ax.set_ylabel('Cyber Risk Level')
 ax.set_title('Categorical Heatmap of Cyber Breach Proportions')
 
-# Move legend outside the plot
-ax.legend(loc='center left', bbox_to_anchor=(1.02, 0.5))
+ax.legend(loc='center left', bbox_to_anchor=(1.05, 0.5))  # Legend outside to the right
 
 st.pyplot(fig)
+
 
 
 # === LEGENDS ===
