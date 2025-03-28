@@ -34,16 +34,40 @@ This dashboard uses seeded synthetic data to simulate cyber breach patterns acro
 - Cyber Risk Levels are displayed as a legend (0 = Minimal Risk, 4 = Critical Risk).
 """)
 
-# === SEEDING & DATA REGEN BUTTON ===
-if "df" not in st.session_state or st.button("🔁 Regenerate Synthetic Data"):
-    np.random.seed(42)
-    st.session_state.df = pd.DataFrame({
-        'Mission Type': np.random.choice(['Surveillance', 'Training', 'Combat', 'Logistics'], size=200),
-        'Cyber Risk Level': np.random.randint(0, 5, size=200),
-        'Cyber Breach History': np.random.choice([0, 1], size=200, p=[0.7, 0.3])
+# === SEEDING & DATA REGEN BUTTON (ENHANCED) ===
+def generate_smart_synthetic_data(seed=42, n=400):
+    np.random.seed(seed)
+    mission_types = ['Surveillance', 'Training', 'Combat', 'Logistics']
+    risk_levels = [0, 1, 2, 3, 4]
+    
+    mission = np.random.choice(mission_types, size=n)
+    risk = np.random.choice(risk_levels, size=n)
+
+    breach_probs = []
+    for m, r in zip(mission, risk):
+        if m == 'Combat' and r == 4:
+            breach_probs.append(0.7)
+        elif m == 'Logistics' and r == 2:
+            breach_probs.append(0.6)
+        elif r >= 3:
+            breach_probs.append(0.4)
+        else:
+            breach_probs.append(0.2)
+
+    breach = np.random.binomial(1, breach_probs)
+
+    return pd.DataFrame({
+        'Mission Type': mission,
+        'Cyber Risk Level': risk,
+        'Cyber Breach History': breach
     })
 
+# Trigger data generation on button press or first load
+if "df" not in st.session_state or st.button("🔁 Regenerate Synthetic Data with Embedded Patterns"):
+    st.session_state.df = generate_smart_synthetic_data()
+
 df = st.session_state.df.copy()
+
 
 # === PROBLEM STATEMENT ===
 st.markdown("### 🧠 AI-Generated Smart Problem Statement")
