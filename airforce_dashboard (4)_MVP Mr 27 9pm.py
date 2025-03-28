@@ -234,8 +234,7 @@ st.plotly_chart(heatmap_fig, use_container_width=True)
 
 # === LEGENDS ===
 
-# Add red/blue legend for breach categories to the right of the heatmap
-ax.legend(['No Cyber Breach', 'Cyber Breach'], loc='upper left', bbox_to_anchor=(1.35, 1.0))
+
 
 # Add a single Risk Level Legend below the red/blue legend
 legend_text_risk_levels = "\n".join([
