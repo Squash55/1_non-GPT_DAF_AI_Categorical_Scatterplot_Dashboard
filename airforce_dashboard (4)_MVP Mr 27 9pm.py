@@ -275,33 +275,40 @@ Q2: What should leadership prioritize?
 A2: Leadership should prioritize mitigating vulnerabilities in the top three breach-prone categories, as indicated in the Pareto chart. This includes reallocating resources, enhancing training, and introducing targeted interventions to reduce breach likelihood in high-risk mission zones.
 """
 
-# === PDF EXPORT USING HTML + streamlit.components.v1 (no external library) ===
+# === SAFELY FORMAT GOLDEN Q&A AND PROVIDE DOWNLOAD ===
 import base64
-import streamlit.components.v1 as components
 
-# === FORMAT Q&A AS HTML ===
-golden_qa_html = f"""
-<h2>🌟 Golden Questions & Answers</h2>
+# === Build Q&A Text Content ===
+golden_qa_text = f"""
+🌟 Golden Questions & Answers
 
-<h3>🧠 Rule-Based Q&A</h3>
-<p><b>Q1:</b> Which mission-risk quadrant has the highest observed breach rate?<br>
-<b>A1:</b> Based on statistical aggregation, the quadrant '<b>{top_breach[0]}</b>' @ Risk Level '<b>{top_breach[1]}</b>' exhibits the highest breach rate of <b>{max_rate:.2%}</b>. This is a critical outlier and should be prioritized for mitigation.</p>
+🧠 Rule-Based Q&A
 
-<p><b>Q2:</b> Are any breach rates significantly higher than expected?<br>
-<b>A2:</b> Yes, significance testing (Chi-Square Test of Independence) identified at least one statistically significant quadrant, indicating that the observed breach rates differ meaningfully from expected distributions. These flagged quadrants may indicate systemic vulnerabilities requiring further investigation.</p>
+Q1: Which mission-risk quadrant has the highest observed breach rate?
+A1: Based on statistical aggregation, the quadrant '{top_breach[0]}' @ Risk Level '{top_breach[1]}' exhibits the highest breach rate of {max_rate:.2%}. This is a critical outlier and should be prioritized for mitigation.
 
-<h3>🤖 GPT-Based Q&A</h3>
-<p><b>Q1:</b> What's the main insight from the heatmap?<br>
-<b>A1:</b> The heatmap suggests that cyber breaches are not uniformly distributed. Specific mission types at particular risk levels—such as 'Logistics' at moderate to high risk—stand out as having elevated breach rates. These areas demand attention and tailored cybersecurity policies.</p>
+Q2: Are any breach rates significantly higher than expected?
+A2: Yes, significance testing (Chi-Square Test of Independence) identified at least one statistically significant quadrant, indicating that the observed breach rates differ meaningfully from expected distributions. These flagged quadrants may indicate systemic vulnerabilities requiring further investigation.
 
-<p><b>Q2:</b> What should leadership prioritize?<br>
-<b>A2:</b> Leadership should prioritize mitigating vulnerabilities in the top three breach-prone categories, as indicated in the Pareto chart. This includes reallocating resources, enhancing training, and introducing targeted interventions to reduce breach likelihood in high-risk mission zones.</p>
+🤖 GPT-Based Q&A
+
+Q1: What's the main insight from the heatmap?
+A1: The heatmap suggests that cyber breaches are not uniformly distributed. Specific mission types at particular risk levels—such as 'Logistics' at moderate to high risk—stand out as having elevated breach rates. These areas demand attention and tailored cybersecurity policies.
+
+Q2: What should leadership prioritize?
+A2: Leadership should prioritize mitigating vulnerabilities in the top three breach-prone categories, as indicated in the Pareto chart. This includes reallocating resources, enhancing training, and introducing targeted interventions to reduce breach likelihood in high-risk mission zones.
 """
 
-# === GENERATE DOWNLOADABLE HTML FILE ===
-html_bytes = golden_qa_html.encode("utf-8")
-b64 = base64.b64encode(html_bytes).decode()
-href = f'<a href="data:text/html;base64,{b64}" download="Golden_QA.html">📥 Download Golden Q&A as HTML</a>'
+# === Display in Streamlit ===
+st.markdown("### 🌟 Golden Questions & Answers")
+st.text(golden_qa_text)
+
+# === Prepare Download as TXT File ===
+b64_txt = base64.b64encode(golden_qa_text.encode()).decode()
+st.markdown(
+    f'<a href="data:text/plain;base64,{b64_txt}" download="Golden_QA.txt">📥 Download Golden Q&A as TXT</a>',
+    unsafe_allow_html=True
+)
 
 # === DISPLAY LINK ===
 st.markdown(href, unsafe_allow_html=True)
