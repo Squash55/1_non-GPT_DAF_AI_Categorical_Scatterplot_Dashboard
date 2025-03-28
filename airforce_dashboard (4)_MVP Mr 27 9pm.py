@@ -77,7 +77,7 @@ df['x_jittered'] = df['x'] + np.random.normal(0, jitter, size=len(df))
 df['y_jittered'] = df['y'] + np.random.normal(0, jitter, size=len(df))
 
 # === PLOT HEATMAP ===
-fig, ax = plt.subplots(figsize=(12, 6))  # Increase width to 12 inches while keeping height at 6 inches
+fig, ax = plt.subplots(figsize=(12, 6))  # Increase width to maximize space usage
 extent = [x_bins[0], x_bins[-1], y_bins[0], y_bins[-1]]
 cmap = LinearSegmentedColormap.from_list('custom_bwr', ['blue', 'white', 'red'], N=256)
 norm = Normalize(vmin=0, vmax=1)
@@ -136,12 +136,13 @@ ax.set_xlabel('Mission Type')
 ax.set_ylabel('Cyber Risk Level')
 ax.set_title('Categorical Heatmap of Cyber Breach Proportions')
 
-# === LEGENDS ===
+# === LEGENDS ABOVE THE HEATMAP ===
 
-# Add red/blue legend for breach categories to the right of the heatmap
-ax.legend(['No Cyber Breach', 'Cyber Breach'], loc='upper left', bbox_to_anchor=(1.35, 1.0))
+# Add red/blue legend for breach categories above the heatmap
+legend_text_breach_categories = "🔵 No Cyber Breach | 🔴 Cyber Breach"
+ax.text(-0.5, 6.2, legend_text_breach_categories, fontsize=10, horizontalalignment='left')
 
-# Add a narrower risk level legend below the red/blue legend
+# Add a narrower risk level legend above the heatmap
 legend_text_risk_levels = "\n".join([
     "📊 Cyber Risk Levels:",
     "0: Minimal - No major vulnerabilities.",
@@ -150,12 +151,11 @@ legend_text_risk_levels = "\n".join([
     "3: High - Significant vulnerabilities.",
     "4: Critical - Severe vulnerabilities."
 ])
-
-# Position the Risk Level Legend below the red/blue legend
-ax.text(4.8, 0.5, legend_text_risk_levels, fontsize=8, verticalalignment='top', horizontalalignment='left')
+ax.text(-0.5, 7.5, legend_text_risk_levels, fontsize=9)
 
 # Display the heatmap plot
 st.pyplot(fig)
+
 
 # Continue with Pareto chart and interpretations...
 
