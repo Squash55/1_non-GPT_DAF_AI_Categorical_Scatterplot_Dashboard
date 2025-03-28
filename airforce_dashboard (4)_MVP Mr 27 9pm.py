@@ -72,4 +72,85 @@ with np.errstate(divide='ignore', invalid='ignore'):
 masked_proportion = np.ma.fix_invalid(proportion)     # Mask invalid values
 
 # === JITTER ===
-jitter = st.slider("Jitter Amount", min_value=0.0, max_value=0.5, value=0.1, step=0.
+jitter = st.slider("Jitter Amount", min_value=0.0, max_value=0.5, value=0.1, step=0.01)
+df['x_jittered'] = df['x'] + np.random.normal(0, jitter, size=len(df))
+df['y_jittered'] = df['y'] + np.random.normal(0, jitter, size=len(df))
+
+# === PLOT HEATMAP ===
+fig, ax = plt.subplots(figsize=(10, 6))
+extent = [x_bins[0], x_bins[-1], y_bins[0], y_bins[-1]]
+cmap = LinearSegmentedColormap.from_list('custom_bwr', ['blue', 'white', 'red'], N=256)
+norm = Normalize(vmin=0, vmax=1)
+im = ax.imshow(masked_proportion.T, extent=extent, origin='lower', cmap=cmap, norm=norm, interpolation='none', alpha=0.8)
+
+mission_types = ['Surveillance', 'Training', 'Combat', 'Logistics']
+significant_labels = []
+
+for i, x in enumerate(x_centers):
+    for j, y in enumerate(y_centers):
+        r = int(heat_red[i, j])   # Successes (cyber breaches)
+        b = int(heat_blue[i, j]) # Failures (no breaches)
+        total = r + b
+        
+        if total >= 5: # Only consider cells with at least 5 observations
+            other_r = heat_red.sum() - r
+            other_b = heat_blue.sum() - b
+            
+            # Create contingency table
+            contingency_table = [[r, b], [other_r, other_b]]
+            
+            # Perform Chi-Square test
+            chi2_statistic, p_value, _, _ = chi2_contingency(contingency_table)
+            
+            if p_value < 0.05: # Significant result
+                ax.text(x + 0.45,
+                        y + 0.45,
+                        f"p={p_value:.3f}", ha='right',
+                        va='top',
+                        fontsize=8,
+                        color='green')
+                significant_labels.append(f"{mission_types[i]} @ Risk Level {j} (p={p_value:.3f})")
+        
+        # Display proportions in each quadrant consistently in black text
+        ax.text(x - 0.45,
+                y + 0.4,
+                f"{r}/{b}" if total > 0 else "N/A",
+                ha='left',
+                va='top',
+                fontsize=8,
+                color='black')
+
+for label in [0, 1]:
+    subset_color = ['blue', 'red'][label]
+    subset_data = df[df['Cyber Breach History'] == label]
+    ax.scatter(subset_data['x_jittered'],
+               subset_data['y_jittered'],
+               color=subset_color,
+               edgecolors='white',
+               linewidth=0.5)
+
+ax.set_xticks(range(4))
+ax.set_xticklabels(mission_types)
+ax.set_yticks(range(5))
+ax.set_xlabel('Mission Type')
+ax.set_ylabel('Cyber Risk Level')
+ax.set_title('Categorical Heatmap of Cyber Breach Proportions')
+ax.legend(['No Cyber Breach', 'Cyber Breach'], loc='upper left')
+
+# === CYBER RISK LEVEL LEGEND ===
+legend_text_risk_levels = "\n".join([
+    "📊 Cyber Risk Levels:",
+    "0: Minimal Risk - No significant vulnerabilities detected.",
+    "1: Low Risk - Minor vulnerabilities; unlikely to impact mission.",
+    "2: Moderate Risk - Some vulnerabilities; could affect mission success.",
+    "3: High Risk - Significant vulnerabilities; mission likely impacted.",
+    "4: Critical Risk - Severe vulnerabilities; mission failure highly probable."
+])
+
+# Add the risk level legend below the existing legend on the right side of the plot
+ax.text(4.2, 1.5, legend_text_risk_levels, fontsize=9)
+
+# Display the heatmap plot
+st.pyplot(fig)
+
+# Continue with Pareto chart and interpretations...
