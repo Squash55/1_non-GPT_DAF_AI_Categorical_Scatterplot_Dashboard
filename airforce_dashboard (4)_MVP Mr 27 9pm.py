@@ -34,6 +34,19 @@ This dashboard uses seeded synthetic data to simulate cyber breach patterns acro
 - Cyber Risk Levels are displayed as a legend (0 = Minimal Risk, 4 = Critical Risk).
 """)
 
+# === TRAINING NOTE ===
+st.markdown("""
+### 🎓 Training Mode: Practice Data Interpretation
+Use the **🔁 Regenerate Synthetic Data with Embedded Patterns** button below to create a new scenario with hidden but detectable cyber breach patterns.
+
+This is ideal for:
+- **Training** analysts to interpret heatmaps and Pareto charts.
+- **Self-checking**: Compare your own insights with the 🧠 Rule-Based and 🤖 GPT-Based interpretations provided.
+- **Scenario testing**: Observe how changing the data changes the flagged insights.
+
+> 🔍 Try identifying high-risk areas and then verify your findings using the Golden Questions & Answers below.
+""")
+
 # === SEEDING & DATA REGEN BUTTON (ENHANCED) ===
 def generate_smart_synthetic_data(seed=42, n=400):
     np.random.seed(seed)
