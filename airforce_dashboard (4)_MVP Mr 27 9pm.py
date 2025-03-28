@@ -311,41 +311,55 @@ st.markdown("""
 - These findings align with the principle that a small number of categories often account for the majority of impacts (Pareto Principle or 80/20 rule).
 - Focusing on these high-priority quadrants could yield substantial improvements in cybersecurity outcomes.
 """)
-# === GOLDEN QUESTIONS & ANSWERS ===
-# === GOLDEN QUESTIONS & ANSWERS ===
+# === GOLDEN QUESTIONS & ANSWERS (COLLAPSIBLE) ===
 st.markdown("### ❓ Golden Questions & Answers")
 
 # Rule-Based Golden Questions & Answers
-st.markdown("#### 🧠 Rule-Based Questions & Answers")
-st.markdown(f"""
-**Q1:** Which mission types and risk levels show statistically significant cyber breach patterns?
+st.markdown("#### 🧠 Rule-Based Questions")
 
+with st.expander("Q1: Which mission types and risk levels show statistically significant cyber breach patterns?"):
+    st.markdown(f"""
 **A1:** Based on the Chi-Square tests, the following cells showed statistically significant deviations in breach rates:
-- """ + ", ".join(significant_labels) + """
+- {', '.join(significant_labels)}
 
 These categories exhibit breach rates that are unlikely to have occurred by chance, warranting targeted risk assessments.
+""")
 
-**Q2:** Are there mission types that consistently show high breach proportions?
+with st.expander("Q2: Are there mission types that consistently show high breach proportions?"):
+    st.markdown("""
+**A2:** Yes, the Pareto chart highlights categories like:
+- Logistics @ Risk Level 2  
+- Combat @ Risk Level 4  
 
-**A2:** Yes, the Pareto chart highlights categories like `Logistics @ Risk Level 2` and `Combat @ Risk Level 4` as consistently high-risk zones. These areas should be prioritized for deeper root cause analysis and mitigation strategies.
+These areas consistently show higher breach rates and should be prioritized for deeper analysis and remediation.
+""")
 
-**Q3:** Does cyber risk level correlate with breach likelihood?
-
-**A3:** A general upward trend in breach proportions is visible as Cyber Risk Level increases, suggesting a positive correlation. However, specific mission types (like `Training`) may exhibit elevated breach rates even at mid-level risks.
+with st.expander("Q3: Does cyber risk level correlate with breach likelihood?"):
+    st.markdown("""
+**A3:** Breach rates tend to increase as Cyber Risk Level increases.  
+However, some mission types (e.g., Training) exhibit elevated breach rates even at moderate risk levels, indicating that both mission context and risk level influence outcomes.
 """)
 
 # GPT-Based Golden Questions & Answers
-st.markdown("#### 🤖 GPT-Based Questions & Answers")
-st.markdown("""
-**Q1:** Where should leadership focus their immediate attention to reduce cyber breach risk?
+st.markdown("#### 🤖 GPT-Based Questions")
 
-**A1:** Focus should be placed on quadrants with the highest breach concentrations—particularly `Logistics @ Risk Level 2` and `Combat @ Risk Level 4`. These appear to be breach hotspots and are prime candidates for policy reinforcement and technical audits.
+with st.expander("Q1: Where should leadership focus their immediate attention to reduce cyber breach risk?"):
+    st.markdown("""
+**A1:** Leadership should prioritize:
+- Logistics @ Risk Level 2  
+- Combat @ Risk Level 4  
 
-**Q2:** What’s the most surprising insight from this dataset?
+These hotspots show consistently high breach rates and represent likely operational vulnerabilities.
+""")
 
-**A2:** Despite being a mid-tier risk, `Training @ Risk Level 3` has a disproportionately high breach rate. This anomaly suggests the possibility of overlooked vulnerabilities in training missions that deserve further exploration.
+with st.expander("Q2: What’s the most surprising insight from this dataset?"):
+    st.markdown("""
+**A2:** Training missions at Risk Level 3 exhibit unusually high breach rates, despite being mid-tier on the risk scale.  
+This suggests overlooked vulnerabilities in areas typically perceived as less critical.
+""")
 
-**Q3:** How can this dashboard guide real-world decisions?
-
-**A3:** By surfacing statistically significant risk quadrants and visualizing breach concentration patterns, this dashboard enables data-driven prioritization. It helps decision-makers allocate cybersecurity resources more efficiently based on empirical risk indicators.
+with st.expander("Q3: How can this dashboard guide real-world decisions?"):
+    st.markdown("""
+**A3:** It provides statistical evidence and AI insights to identify breach-prone combinations of mission type and risk level.  
+Leaders can prioritize interventions where risk is most elevated, and analysts can validate their findings against AI-generated suggestions.
 """)
