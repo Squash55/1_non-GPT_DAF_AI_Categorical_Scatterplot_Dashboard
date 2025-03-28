@@ -20,7 +20,7 @@ Each AI output is labeled:
 st.markdown("- **Rule-Based** for insights derived from statistical methods.")
 
 st.markdown("- **GPT-Based** for generative AI explanations.")
-
+""")
 # === DASHBOARD TITLE ===
 st.title("Air Force Cyber Breach Analysis Dashboard")
 
