@@ -380,4 +380,5 @@ These charts complement the heatmap and Pareto views and offer new angles for go
 """)
 
 if st.checkbox("📊 Show Multi-Chart Visuals"):
+    st.success("✅ Checkbox triggered! Now loading quadrant charts...")
     show_chart_quadrant(df)
