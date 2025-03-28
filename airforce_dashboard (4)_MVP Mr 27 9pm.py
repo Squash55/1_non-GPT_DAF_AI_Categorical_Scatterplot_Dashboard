@@ -137,10 +137,10 @@ ax.set_ylabel('Cyber Risk Level')
 ax.set_title('Categorical Heatmap of Cyber Breach Proportions')
 ax.legend(['No Cyber Breach', 'Cyber Breach'], loc='upper left')
 
-# === CYBER RISK LEVEL LEGEND ===
+# === LEGENDS ===
 
 # Add red/blue legend for breach categories to the right of the heatmap
-ax.legend(['No Cyber Breach', 'Cyber Breach'], loc='upper left', bbox_to_anchor=(1.15, 1.0))
+ax.legend(['No Cyber Breach', 'Cyber Breach'], loc='upper left', bbox_to_anchor=(1.25, 1.0))
 
 # Add a narrower risk level legend below the red/blue legend
 legend_text_risk_levels = "\n".join([
@@ -153,7 +153,7 @@ legend_text_risk_levels = "\n".join([
 ])
 
 # Position the Risk Level Legend below the red/blue legend
-ax.text(4.5, 0.5, legend_text_risk_levels, fontsize=8, verticalalignment='top', horizontalalignment='left')
+ax.text(4.8, 0.5, legend_text_risk_levels, fontsize=8, verticalalignment='top', horizontalalignment='left')
 
 
 # Add the risk level legend below the existing legend on the right side of the plot
@@ -163,6 +163,7 @@ ax.text(4.2, 1.5, legend_text_risk_levels, fontsize=9)
 st.pyplot(fig)
 
 # Continue with Pareto chart and interpretations...
+# === PARETO CHART ===
 # === PARETO CHART ===
 st.subheader("📊 Cyber Breach Rate Pareto Chart")
 
@@ -211,4 +212,3 @@ st.markdown("""
 - These findings align with the principle that a small number of categories often account for the majority of impacts (Pareto Principle or 80/20 rule).
 - Focusing on these high-priority quadrants could yield substantial improvements in cybersecurity outcomes.
 """)
-
