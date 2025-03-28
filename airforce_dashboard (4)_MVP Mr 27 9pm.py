@@ -270,11 +270,9 @@ st.markdown("### 🌟 Golden Questions & Answers")
 st.text(golden_qa_text)
 
 # === Prepare Download as TXT File ===
+# ✅ ENSURE the variable `href` is defined just above it like this:
 b64_txt = base64.b64encode(golden_qa_text.encode()).decode()
-st.markdown(
-    f'<a href="data:text/plain;base64,{b64_txt}" download="Golden_QA.txt">📥 Download Golden Q&A as TXT</a>',
-    unsafe_allow_html=True
-)
+href = f'<a href="data:text/plain;base64,{b64_txt}" download="Golden_QA.txt">📥 Download Golden Q&A as TXT</a>'
 
 # === DISPLAY LINK ===
 st.markdown(href, unsafe_allow_html=True)
