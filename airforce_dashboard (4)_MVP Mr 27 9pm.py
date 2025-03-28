@@ -77,7 +77,7 @@ df['x_jittered'] = df['x'] + np.random.normal(0, jitter, size=len(df))
 df['y_jittered'] = df['y'] + np.random.normal(0, jitter, size=len(df))
 
 # === PLOT HEATMAP ===
-fig, ax = plt.subplots(figsize=(10, 6))
+fig, ax = plt.subplots(figsize=(12, 6))  # Increase width to 12 inches while keeping height at 6 inches
 extent = [x_bins[0], x_bins[-1], y_bins[0], y_bins[-1]]
 cmap = LinearSegmentedColormap.from_list('custom_bwr', ['blue', 'white', 'red'], N=256)
 norm = Normalize(vmin=0, vmax=1)
@@ -135,14 +135,13 @@ ax.set_yticks(range(5))
 ax.set_xlabel('Mission Type')
 ax.set_ylabel('Cyber Risk Level')
 ax.set_title('Categorical Heatmap of Cyber Breach Proportions')
-ax.legend(['No Cyber Breach', 'Cyber Breach'], loc='upper left')
 
 # === LEGENDS ===
 
 # Add red/blue legend for breach categories to the right of the heatmap
 ax.legend(['No Cyber Breach', 'Cyber Breach'], loc='upper left', bbox_to_anchor=(1.35, 1.0))
 
-# Add a single Risk Level Legend below the red/blue legend
+# Add a narrower risk level legend below the red/blue legend
 legend_text_risk_levels = "\n".join([
     "📊 Cyber Risk Levels:",
     "0: Minimal - No major vulnerabilities.",
@@ -154,7 +153,6 @@ legend_text_risk_levels = "\n".join([
 
 # Position the Risk Level Legend below the red/blue legend
 ax.text(4.8, 0.5, legend_text_risk_levels, fontsize=8, verticalalignment='top', horizontalalignment='left')
-
 
 # Display the heatmap plot
 st.pyplot(fig)
