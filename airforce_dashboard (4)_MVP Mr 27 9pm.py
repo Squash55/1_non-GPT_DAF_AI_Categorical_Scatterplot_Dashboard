@@ -211,11 +211,12 @@ st.markdown("""
 - Focusing on these high-priority quadrants could yield substantial improvements in cybersecurity outcomes.
 """)
 # === GOLDEN QUESTIONS & ANSWERS ===
+# === GOLDEN QUESTIONS & ANSWERS ===
 st.markdown("### ❓ Golden Questions & Answers")
 
 # Rule-Based Golden Questions & Answers
 st.markdown("#### 🧠 Rule-Based Questions & Answers")
-st.markdown("""
+st.markdown(f"""
 **Q1:** Which mission types and risk levels show statistically significant cyber breach patterns?
 
 **A1:** Based on the Chi-Square tests, the following cells showed statistically significant deviations in breach rates:
