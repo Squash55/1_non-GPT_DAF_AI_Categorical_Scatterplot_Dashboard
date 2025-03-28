@@ -369,6 +369,8 @@ Leaders can prioritize interventions where risk is most elevated, and analysts c
 # === MULTI-CHART RISK QUADRANT ===
 # === MULTI-CHART RISK QUADRANT ===
 from chart_modules.chart_quadrant import show_chart_quadrant
+show_chart_quadrant(df)
+
 
 # Call the function using your current DataFrame
 show_chart_quadrant(df)
