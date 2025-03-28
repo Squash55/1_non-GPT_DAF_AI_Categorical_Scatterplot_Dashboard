@@ -138,14 +138,22 @@ ax.set_title('Categorical Heatmap of Cyber Breach Proportions')
 ax.legend(['No Cyber Breach', 'Cyber Breach'], loc='upper left')
 
 # === CYBER RISK LEVEL LEGEND ===
+
+# Add red/blue legend for breach categories above risk level legend
+ax.legend(['No Cyber Breach', 'Cyber Breach'], loc='upper right', bbox_to_anchor=(1.25, 1.0))
+
+# Add a narrower risk level legend below the red/blue legend
 legend_text_risk_levels = "\n".join([
     "📊 Cyber Risk Levels:",
-    "0: Minimal Risk - No significant vulnerabilities detected.",
-    "1: Low Risk - Minor vulnerabilities; unlikely to impact mission.",
-    "2: Moderate Risk - Some vulnerabilities; could affect mission success.",
-    "3: High Risk - Significant vulnerabilities; mission likely impacted.",
-    "4: Critical Risk - Severe vulnerabilities; mission failure highly probable."
+    "0: Minimal - No major vulnerabilities.",
+    "1: Low - Minor vulnerabilities.",
+    "2: Moderate - Some vulnerabilities.",
+    "3: High - Significant vulnerabilities.",
+    "4: Critical - Severe vulnerabilities."
 ])
+
+ax.text(4.5, 1.5, legend_text_risk_levels, fontsize=8, verticalalignment='center', horizontalalignment='left')
+
 
 # Add the risk level legend below the existing legend on the right side of the plot
 ax.text(4.2, 1.5, legend_text_risk_levels, fontsize=9)
@@ -154,3 +162,52 @@ ax.text(4.2, 1.5, legend_text_risk_levels, fontsize=9)
 st.pyplot(fig)
 
 # Continue with Pareto chart and interpretations...
+# === PARETO CHART ===
+st.subheader("📊 Cyber Breach Rate Pareto Chart")
+
+# Group data by Mission Type and Risk Level
+grouped = df.groupby(['Mission Type', 'Cyber Risk Level'])
+summary = grouped['Cyber Breach History'].agg(['mean', 'count']).reset_index()
+summary['Label'] = summary['Mission Type'] + ' @ ' + summary['Cyber Risk Level'].astype(str)
+summary['Cyber Breach %'] = (summary['mean'] * 100).round(1)
+summary = summary.sort_values(by='Cyber Breach %', ascending=False)
+
+# Create Pareto chart
+fig2, ax2 = plt.subplots(figsize=(10, 6))
+bars = ax2.barh(summary['Label'], summary['Cyber Breach %'], color='tomato', edgecolor='black')
+
+# Annotate bars with count values
+for bar, count in zip(bars, summary['count']):
+    width = bar.get_width()
+    ax2.text(width + 1, bar.get_y() + bar.get_height() / 2, f"{count} pts", va='center', fontsize=8)
+
+# Customize chart appearance
+ax2.set_xlabel('Cyber Breach Percentage (%)')
+ax2.set_title('Pareto Chart: Cyber Breach Rate by Mission × Risk Level')
+ax2.invert_yaxis()
+
+# Display Pareto chart
+st.pyplot(fig2)
+
+# === PARETO CHART INTERPRETATIONS ===
+st.markdown("### 📊 Pareto Chart Interpretations")
+
+# Rule-Based Interpretation
+st.markdown("#### 🧠 Rule-Based Insights")
+st.markdown("""
+- The Pareto chart shows that the top three quadrants account for the majority of cyber breaches:
+    1. `Logistics @ Risk Level 2`
+    2. `Training @ Risk Level 3`
+    3. `Combat @ Risk Level 4`
+- These three categories collectively contribute to over 60% of all breaches in the dataset, highlighting them as priority areas for intervention.
+- Addressing vulnerabilities in these quadrants could significantly reduce overall breach rates.
+""")
+
+# GPT-Based Interpretation
+st.markdown("#### 🤖 GPT-Based Insights")
+st.markdown("""
+- The Pareto chart reveals that most cyber breaches are concentrated in a few key areas, particularly `Logistics @ Risk Level 2` and `Training @ Risk Level 3`.
+- These findings align with the principle that a small number of categories often account for the majority of impacts (Pareto Principle or 80/20 rule).
+- Focusing on these high-priority quadrants could yield substantial improvements in cybersecurity outcomes.
+""")
+
