@@ -77,7 +77,8 @@ df['x_jittered'] = df['x'] + np.random.normal(0, jitter, size=len(df))
 df['y_jittered'] = df['y'] + np.random.normal(0, jitter, size=len(df))
 
 # === PLOT HEATMAP ===
-fig, ax = plt.subplots(figsize=(16, 6))  # Increase width from 10 to 12
+fig, ax = plt.subplots(figsize=(14, 6))  # Further increase width to give space for heatmap
+ax.set_position([0.1, 0.1, 0.75, 0.8])   # Adjust subplot position to avoid legend overlap
 extent = [x_bins[0], x_bins[-1], y_bins[0], y_bins[-1]]
 cmap = LinearSegmentedColormap.from_list('custom_bwr', ['blue', 'white', 'red'], N=256)
 norm = Normalize(vmin=0, vmax=1)
