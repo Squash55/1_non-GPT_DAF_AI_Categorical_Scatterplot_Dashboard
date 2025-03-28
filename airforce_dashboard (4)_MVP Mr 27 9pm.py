@@ -83,21 +83,29 @@ for i, x in enumerate(x_centers):
             chi2_statistic, p_value, _, _ = chi2_contingency(contingency_table)
             
             if p_value < 0.05: # Significant result
-                ax.text(x + 0.45, y + 0.45, f"p={p_value:.3f}", ha='right', va='top', fontsize=8,
-                        color='green', alpha=0.9)
+                ax.text(x + 0.45, y + 0.45,
+                        f"p={p_value:.3f}", ha='right',
+                        va='top', fontsize=8,
+                        color='green')
                 significant_labels.append(f"{mission_types[i]} @ Risk Level {j} (p={p_value:.3f})")
         
-        # Display proportions in each quadrant with consistent styling
-        ax.text(x - 0.45, y + 0.4,
+        # Display proportions in each quadrant consistently in black text
+        ax.text(x - 0.45,
+                y + 0.4,
                 f"{r}/{b}" if total > 0 else "N/A",
-                ha='left', va='top', fontsize=8,
-                color='black')  # Ensure all text is black for readability
+                ha='left',
+                va='top',
+                fontsize=8,
+                color='black')
 
 for label in [0, 1]:
     subset_color = ['blue', 'red'][label]
     subset_data = df[df['Cyber Breach History'] == label]
-    ax.scatter(subset_data['x_jittered'], subset_data['y_jittered'], color=subset_color,
-               edgecolors='white', linewidth=0.5)
+    ax.scatter(subset_data['x_jittered'],
+               subset_data['y_jittered'],
+               color=subset_color,
+               edgecolors='white',
+               linewidth=0.5)
 
 ax.set_xticks(range(4))
 ax.set_xticklabels(mission_types)
@@ -105,7 +113,7 @@ ax.set_yticks(range(5))
 ax.set_xlabel('Mission Type')
 ax.set_ylabel('Cyber Risk Level')
 ax.set_title('Categorical Heatmap of Cyber Breach Proportions')
-ax.legend(['No Cyber Breach', 'Cyber Breach'], loc='upper left', bbox_to_anchor=(1.02, 1))
+ax.legend(['No Cyber Breach', 'Cyber Breach'], loc='upper left')
 
 st.pyplot(fig)
 
@@ -117,3 +125,22 @@ if significant_labels:
         st.write("🔺", label)
 else:
     st.info("No quadrant showed a statistically significant difference.")
+
+# === PARETO CHART ===
+st.subheader("📊 Cyber Breach Rate Pareto Chart")
+
+grouped = df.groupby(['Mission Type', 'Cyber Risk Level'])
+summary = grouped['Cyber Breach History'].agg(['mean', 'count']).reset_index()
+summary['Label'] = summary['Mission Type'] + ' @ ' + summary['Cyber Risk Level'].astype(str)
+summary['Cyber Breach %'] = (summary['mean'] * 100).round(1)
+summary.sort_values(by='Cyber Breach %', ascending=False)
+
+fig2, ax2 = plt.subplots(figsize=(10, 6))
+bars = ax2.barh(summary['Label'], summary['Cyber Breach %'], color='tomato', edgecolor='black')
+
+for bar,
+count in zip(bars,
+summary[
+count]):
+width.
+plt.show
