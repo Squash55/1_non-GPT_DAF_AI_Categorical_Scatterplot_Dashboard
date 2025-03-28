@@ -139,8 +139,8 @@ ax.legend(['No Cyber Breach', 'Cyber Breach'], loc='upper left')
 
 # === CYBER RISK LEVEL LEGEND ===
 
-# Add red/blue legend for breach categories above risk level legend
-ax.legend(['No Cyber Breach', 'Cyber Breach'], loc='upper right', bbox_to_anchor=(1.25, 1.0))
+# Add red/blue legend for breach categories to the right of the heatmap
+ax.legend(['No Cyber Breach', 'Cyber Breach'], loc='upper left', bbox_to_anchor=(1.15, 1.0))
 
 # Add a narrower risk level legend below the red/blue legend
 legend_text_risk_levels = "\n".join([
@@ -152,7 +152,8 @@ legend_text_risk_levels = "\n".join([
     "4: Critical - Severe vulnerabilities."
 ])
 
-ax.text(4.5, 1.5, legend_text_risk_levels, fontsize=8, verticalalignment='center', horizontalalignment='left')
+# Position the Risk Level Legend below the red/blue legend
+ax.text(4.5, 0.5, legend_text_risk_levels, fontsize=8, verticalalignment='top', horizontalalignment='left')
 
 
 # Add the risk level legend below the existing legend on the right side of the plot
