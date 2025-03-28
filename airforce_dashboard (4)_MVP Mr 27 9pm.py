@@ -1571,8 +1571,10 @@ legend_text_risk_levels = "\n".join([
     "📊 Cyber Risk Levels:",
     "0: Minimal - No major vulnerabilities.",
     "1: Low - Minor vulnerabilities.",
-    "2
-    st.markdown(href, unsafe_allow_html=True)
+    "2: Moderate - Some vulnerabilities.",
+    "3: High - Significant vulnerabilities.",
+    "4: Critical - Severe vulnerabilities."
+])
                 ^^^^
 
 # === PDF GENERATION USING REPORTLAB (Alternative to fpdf) ===
