@@ -226,7 +226,6 @@ st.markdown("""
 """.format(top_breach[0], top_breach[1], max_rate))
 
 from io import BytesIO
-from fpdf import FPDF
 
 # === GENERATE GOLDEN Q&A TEXT ===
 golden_qa = f"""
