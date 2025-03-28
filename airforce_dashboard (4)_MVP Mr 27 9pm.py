@@ -313,6 +313,8 @@ st.markdown("""
 """)
 # === GOLDEN QUESTIONS & ANSWERS (COLLAPSIBLE) ===
 st.markdown("### ❓ Golden Questions & Answers")
+st.markdown("*Click on each question below to reveal the answer. These dropdowns are designed to support learning and exploration — try answering first before revealing the AI insights!*")
+st.markdown("### ❓ Golden Questions & Answers")
 
 # Rule-Based Golden Questions & Answers
 st.markdown("#### 🧠 Rule-Based Questions")
