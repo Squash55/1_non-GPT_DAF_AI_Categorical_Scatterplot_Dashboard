@@ -152,9 +152,15 @@ with np.errstate(divide='ignore', invalid='ignore'):
 masked_proportion = np.ma.fix_invalid(proportion)     # Mask invalid values
 
 # === JITTER ===
-jitter = st.slider("Jitter Amount", min_value=0.0, max_value=0.5, value=0.1, step=0.01)
-df['x_jittered'] = df['x'] + np.random.normal(0, jitter, size=len(df))
-df['y_jittered'] = df['y'] + np.random.normal(0, jitter, size=len(df))
+jitter = st.slider(
+    "Jitter Amount", 
+    min_value=0.0, 
+    max_value=0.5, 
+    value=0.1, 
+    step=0.01,
+    key="jitter_slider_heatmap"
+)
+
 
 
 import plotly.graph_objects as go
