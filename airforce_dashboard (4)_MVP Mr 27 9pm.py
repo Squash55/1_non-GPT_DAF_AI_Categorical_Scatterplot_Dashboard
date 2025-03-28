@@ -76,9 +76,13 @@ jitter = st.slider("Jitter Amount", min_value=0.0, max_value=0.5, value=0.1, ste
 df['x_jittered'] = df['x'] + np.random.normal(0, jitter, size=len(df))
 df['y_jittered'] = df['y'] + np.random.normal(0, jitter, size=len(df))
 
+
+
+
 # === PLOT HEATMAP ===
-fig, ax = plt.subplots(figsize=(14, 6))  # Further increase width to give space for heatmap
-ax.set_position([0.1, 0.1, 0.75, 0.8])   # Adjust subplot position to avoid legend overlap
+f# === PLOT HEATMAP (UPDATED) ===
+fig, ax = plt.subplots(figsize=(14, 6))  # Increased width
+
 extent = [x_bins[0], x_bins[-1], y_bins[0], y_bins[-1]]
 cmap = LinearSegmentedColormap.from_list('custom_bwr', ['blue', 'white', 'red'], N=256)
 norm = Normalize(vmin=0, vmax=1)
@@ -89,37 +93,21 @@ significant_labels = []
 
 for i, x in enumerate(x_centers):
     for j, y in enumerate(y_centers):
-        r = int(heat_red[i, j])   # Successes (cyber breaches)
-        b = int(heat_blue[i, j]) # Failures (no breaches)
+        r = int(heat_red[i, j])
+        b = int(heat_blue[i, j])
         total = r + b
-        
-        if total >= 5: # Only consider cells with at least 5 observations
+
+        if total >= 5:
             other_r = heat_red.sum() - r
             other_b = heat_blue.sum() - b
-            
-            # Create contingency table
             contingency_table = [[r, b], [other_r, other_b]]
-            
-            # Perform Chi-Square test
             chi2_statistic, p_value, _, _ = chi2_contingency(contingency_table)
-            
-            if p_value < 0.05: # Significant result
-                ax.text(x + 0.45,
-                        y + 0.45,
-                        f"p={p_value:.3f}", ha='right',
-                        va='top',
-                        fontsize=8,
-                        color='green')
+
+            if p_value < 0.05:
+                ax.text(x + 0.45, y + 0.45, f"p={p_value:.3f}", ha='right', va='top', fontsize=8, color='green')
                 significant_labels.append(f"{mission_types[i]} @ Risk Level {j} (p={p_value:.3f})")
-        
-        # Display proportions in each quadrant consistently in black text
-        ax.text(x - 0.45,
-                y + 0.4,
-                f"{r}/{b}" if total > 0 else "N/A",
-                ha='left',
-                va='top',
-                fontsize=8,
-                color='black')
+
+        ax.text(x - 0.45, y + 0.4, f"{r}/{b}" if total > 0 else "N/A", ha='left', va='top', fontsize=8, color='black')
 
 for label in [0, 1]:
     subset_color = ['blue', 'red'][label]
@@ -128,7 +116,8 @@ for label in [0, 1]:
                subset_data['y_jittered'],
                color=subset_color,
                edgecolors='white',
-               linewidth=0.5)
+               linewidth=0.5,
+               label='Cyber Breach' if label == 1 else 'No Cyber Breach')
 
 ax.set_xticks(range(4))
 ax.set_xticklabels(mission_types)
@@ -136,7 +125,12 @@ ax.set_yticks(range(5))
 ax.set_xlabel('Mission Type')
 ax.set_ylabel('Cyber Risk Level')
 ax.set_title('Categorical Heatmap of Cyber Breach Proportions')
-ax.legend(['No Cyber Breach', 'Cyber Breach'], loc='upper left')
+
+# Move legend outside the plot
+ax.legend(loc='center left', bbox_to_anchor=(1.02, 0.5))
+
+st.pyplot(fig)
+
 
 # === LEGENDS ===
 
