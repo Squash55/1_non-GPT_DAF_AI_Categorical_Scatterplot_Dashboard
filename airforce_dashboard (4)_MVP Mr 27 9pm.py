@@ -272,6 +272,29 @@ st.markdown("""
 Together, the heatmap shows where breaches are concentrated **visually** and **statistically**.
 """)
 
+for i, x in enumerate(x_centers):
+    for j, y in enumerate(y_centers):
+        r = int(heat_red[i, j])
+        b = int(heat_blue[i, j])
+        total = r + b
+
+        if total > 0:
+            breach_rate = r / total
+            ax.text(x, y, f"{breach_rate:.0%}", color='black', fontsize=10, ha='center', va='center', fontweight='bold')
+        else:
+            ax.text(x, y, "N/A", color='gray', fontsize=9, ha='center', va='center')
+
+        if total >= 5:
+            other_r = heat_red.sum() - r
+            other_b = heat_blue.sum() - b
+            contingency_table = [[r, b], [other_r, other_b]]
+            chi2_statistic, p_value, _, _ = chi2_contingency(contingency_table)
+
+            if p_value < 0.05:
+                ax.text(x + 0.45, y + 0.45, f"p={p_value:.3f}", ha='right', va='top', fontsize=8, color='green')
+
+        # Show actual counts
+        ax.text(x - 0.45, y + 0.4, f"{r}/{b}" if total > 0 else "N/A", ha='left', va='top', fontsize=8, color='black')
 
 # === CHI-SQUARE TEST EXPLANATION ===
 st.markdown("""
