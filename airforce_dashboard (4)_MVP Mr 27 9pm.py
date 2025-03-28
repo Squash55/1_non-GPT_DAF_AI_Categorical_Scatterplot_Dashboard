@@ -159,78 +159,128 @@ df['y_jittered'] = df['y'] + np.random.normal(0, jitter, size=len(df))
 
 import plotly.graph_objects as go
 
-# === PREP FOR PLOTLY HEATMAP ===
+# === PREPARE FOR HEATMAP ===
+mission_map = {'Surveillance': 0, 'Training': 1, 'Combat': 2, 'Logistics': 3}
+df['x'] = df['Mission Type'].map(mission_map)
+df['y'] = df['Cyber Risk Level']
 
-# Build heatmap matrix of breach rates
-breach_rate_matrix = np.full((len(mission_map), 5), np.nan)
-p_value_matrix = np.full((len(mission_map), 5), np.nan)
-count_matrix = np.zeros((len(mission_map), 5))
+x_bins = np.linspace(-0.5, 3.5, 5)
+y_bins = np.linspace(-0.5, 4.5, 6)
+x_centers = (x_bins[:-1] + x_bins[1:]) / 2
+y_centers = (y_bins[:-1] + y_bins[1:]) / 2
 
-for i, m in enumerate(mission_map):
-    for r in range(5):
-        subset = df[(df['Mission Type'] == m) & (df['Cyber Risk Level'] == r)]
-        total = len(subset)
-        breaches = subset['Cyber Breach History'].sum()
-        if total > 0:
-            breach_rate_matrix[i, r] = breaches / total
-            count_matrix[i, r] = total
+# Red = breaches, Blue = no breaches
+heat_red, _, _ = np.histogram2d(
+    df[df['Cyber Breach History'] == 1]['x'], 
+    df[df['Cyber Breach History'] == 1]['y'], 
+    bins=[x_bins, y_bins]
+)
+heat_blue, _, _ = np.histogram2d(
+    df[df['Cyber Breach History'] == 0]['x'], 
+    df[df['Cyber Breach History'] == 0]['y'], 
+    bins=[x_bins, y_bins]
+)
+heat_total = heat_red + heat_blue
 
-            # Chi-square p-value for quadrant
-            other = df[~((df['Mission Type'] == m) & (df['Cyber Risk Level'] == r))]
-            other_breaches = other['Cyber Breach History'].sum()
-            other_total = len(other)
-            contingency = [[breaches, total - breaches],
-                           [other_breaches, other_total - other_breaches]]
-            _, p_val, _, _ = chi2_contingency(contingency)
-            p_value_matrix[i, r] = p_val
+with np.errstate(divide='ignore', invalid='ignore'):
+    proportion = np.true_divide(heat_red, heat_total)
+    proportion[heat_total == 0] = np.nan
 
-# Build hover text
-hover_text = []
-for i, m in enumerate(mission_map):
-    row = []
-    for r in range(5):
-        pct = breach_rate_matrix[i, r]
-        cnt = count_matrix[i, r]
-        pval = p_value_matrix[i, r]
-        if np.isnan(pct):
-            row.append("No data")
-        else:
-            txt = (
-                f"<b>{m} @ Risk Level {r}</b><br>"
-                f"Breach Rate: {pct:.1%}<br>"
-                f"Total Records: {int(cnt)}<br>"
-                f"p-value: {pval:.3f}"
-            )
-            row.append(txt)
-    hover_text.append(row)
+masked_proportion = np.ma.fix_invalid(proportion)
 
-# Transpose to match axes
-z = breach_rate_matrix.T
-hover_text = np.array(hover_text).T
-tick_labels_x = list(mission_map.keys())
-tick_labels_y = list(range(5))
+# === JITTER SLIDER ===
+jitter = st.slider("Jitter Amount", min_value=0.0, max_value=0.5, value=0.1, step=0.01)
+df['x_jittered'] = df['x'] + np.random.normal(0, jitter, size=len(df))
+df['y_jittered'] = df['y'] + np.random.normal(0, jitter, size=len(df))
 
-# Create Plotly Heatmap
-heatmap_fig = go.Figure(data=go.Heatmap(
-    z=z,
-    x=tick_labels_x,
-    y=tick_labels_y,
-    text=hover_text,
-    hoverinfo="text",
-    colorscale=[[0, 'blue'], [0.5, 'white'], [1, 'red']],
-    colorbar=dict(title="Breach %", tickformat=".0%")
-))
+# === PLOT HEATMAP ===
+fig, ax = plt.subplots(figsize=(14, 6))
 
-heatmap_fig.update_layout(
-    title="Interactive Heatmap of Cyber Breach Proportions",
-    xaxis_title="Mission Type",
-    yaxis_title="Cyber Risk Level",
-    yaxis=dict(autorange='reversed'),
-    margin=dict(l=40, r=20, t=50, b=40),
-    height=500
+extent = [x_bins[0], x_bins[-1], y_bins[0], y_bins[-1]]
+cmap = LinearSegmentedColormap.from_list('custom_bwr', ['blue', 'white', 'red'], N=256)
+norm = Normalize(vmin=0, vmax=1)
+
+# Show the proportion heatmap
+im = ax.imshow(
+    masked_proportion.T, 
+    extent=extent, 
+    origin='lower', 
+    cmap=cmap, 
+    norm=norm, 
+    interpolation='none', 
+    alpha=0.8
 )
 
-st.plotly_chart(heatmap_fig, use_container_width=True)
+mission_types = ['Surveillance', 'Training', 'Combat', 'Logistics']
+significant_labels = []
+
+# Loop through each grid cell
+for i, x in enumerate(x_centers):
+    for j, y in enumerate(y_centers):
+        r = int(heat_red[i, j])
+        b = int(heat_blue[i, j])
+        total = r + b
+
+        # Center breach percentage
+        if total > 0:
+            breach_rate = r / total
+            ax.text(x, y, f"{breach_rate:.0%}", color='black', fontsize=10, ha='center', va='center', fontweight='bold')
+        else:
+            ax.text(x, y, "N/A", color='gray', fontsize=9, ha='center', va='center')
+
+        # Add green p-value for significance
+        if total >= 5:
+            other_r = heat_red.sum() - r
+            other_b = heat_blue.sum() - b
+            contingency_table = [[r, b], [other_r, other_b]]
+            chi2_statistic, p_value, _, _ = chi2_contingency(contingency_table)
+
+            if p_value < 0.05:
+                ax.text(x + 0.45, y + 0.45, f"p={p_value:.3f}", ha='right', va='top', fontsize=8, color='green')
+                significant_labels.append(f"{mission_types[i]} @ Risk Level {j} (p={p_value:.3f})")
+
+        # Show actual count ratios (breach / no breach)
+        ax.text(x - 0.45, y + 0.4, f"{r}/{b}" if total > 0 else "N/A", ha='left', va='top', fontsize=8, color='black')
+
+# Scatter points with jitter (breach vs no breach)
+for label in [0, 1]:
+    color = ['blue', 'red'][label]
+    subset_data = df[df['Cyber Breach History'] == label]
+    ax.scatter(
+        subset_data['x_jittered'], 
+        subset_data['y_jittered'], 
+        color=color,
+        edgecolors='white',
+        linewidth=0.5,
+        label='Cyber Breach' if label == 1 else 'No Cyber Breach'
+    )
+
+# === AXIS CONFIG ===
+ax.set_xticks(range(4))
+ax.set_xticklabels(mission_types)
+ax.set_yticks(range(5))
+ax.set_xlabel('Mission Type')
+ax.set_ylabel('Cyber Risk Level')
+ax.set_title('Categorical Heatmap of Cyber Breach Proportions')
+
+# === LEGENDS ===
+handles, labels = ax.get_legend_handles_labels()
+ax.legend(handles, labels, loc='upper left', bbox_to_anchor=(1.05, 1.0))
+
+# === RISK LEVEL LEGEND TEXT ===
+legend_text_risk_levels = "\n".join([
+    "📊 Cyber Risk Levels:",
+    "0: Minimal - No major vulnerabilities.",
+    "1: Low - Minor vulnerabilities.",
+    "2: Moderate - Some vulnerabilities.",
+    "3: High - Significant vulnerabilities.",
+    "4: Critical - Severe vulnerabilities."
+])
+ax.text(4.8, 0.5, legend_text_risk_levels, fontsize=8, verticalalignment='top', horizontalalignment='left')
+
+# === SHOW THE PLOT ===
+st.pyplot(fig)
+
 
 # === LEGENDS ===
 
